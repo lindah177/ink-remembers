@@ -94,14 +94,26 @@ const GAME_DATA = {
       corkboardTemplate: "Mara found a {0} list in {1}. Tom says it was {2} writing, with {3} to the coast. They cannot both be right."
     },
 
-    
+    {
+    id: "search",
+      title: "The Search",
+      letters: [
+        {
+          witness: "Corwin Vane",
+          inkColor: "#5a1f1f",
+          text: "We forced the shed lock together. Behind the rope I found a sealed letter. Mara was checking the window. I put it in my coat.",
+          clueWords: ["lock", "sealed"]
+        },
+        {
+          witness: "Mara Hale",
+          inkColor: "#4a3018",
+          text: "We forced the shed together. His compass sat on the sill. Placed, not dropped. Corwin turned away fast when I looked at him.",
+          clueWords: ["compass", "placed"]
+        }
+      ],
+      corkboardTemplate: "Corwin and Mara forced the {0} together. Corwin found a {1} letter and hid it. Mara found the {2}, deliberately {3}, and saw Corwin flinch."
+    },
 
-    // TODO(narrative): add these 4 more events, same shape as above —
-    // see docs/game-explainer.md for the story bible and witness details.
-    //   { id: "breakfast", title: "The Last Breakfast", ... }
-    //   { id: "argument", title: "The Argument", ... }
-    //   { id: "letter-to-self", title: "The Letter He Sent Himself", ... }
-    //   { id: "search", title: "The Search", ... }
   ],
 
   ending: {
