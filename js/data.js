@@ -15,6 +15,47 @@
 const GAME_DATA = {
   events: [
     {
+       id: "breakfast",
+      title: "The Last Breakfast",
+      letters: [
+        {
+          witness: "Mara Hale",
+          inkColor: "#4a3018",
+          text: "He burned letters in the hearth before I woke. Ash still on his sleeve. He pressed our mother's ring into my palm and said nothing.",
+          clueWords: ["letters", "ring"]
+        },
+        {
+          witness: "Tom Reyes",
+          inkColor: "#2b3a4a",
+          text: "I came early. He was packing a bag by the window. He slipped a second ring into his pocket when he saw me. He did not smile.",
+          clueWords: ["bag", "pocket"]
+        }
+      ],
+      corkboardTemplate: "Mara saw him burn {0} and give her the {1}. Tom arrived early and saw him packing a {2}, hiding a second ring in his {3}."
+    },
+    {
+
+     id: "argument",
+      title: "The Argument",
+      letters: [
+        {
+          witness: "Corwin Vane",
+          inkColor: "#5a1f1f",
+          text: "The stranger left before the shouting began. Fine coat, no name. Josiah was already angry when I returned from the back room.",
+          clueWords: ["stranger", "returned"]
+        },
+        {
+          witness: "Tom Reyes",
+          inkColor: "#2b3a4a",
+          text: "I was outside the door. The stranger was still inside when Halvard's name was shouted. Then a chair scraped. Then silence.",
+          clueWords: ["halvard", "silence"]
+        }
+      ],
+      corkboardTemplate: "Corwin says the {0} left before the fight, and he only {1} afterward. Tom heard {2}'s name shouted while the stranger was still inside, then {3}."
+    },
+
+    
+    {
       id: "docks",
       title: "Last Seen at the Docks",
       letters: [
@@ -32,7 +73,28 @@ const GAME_DATA = {
         }
       ],
       corkboardTemplate: "Tom saw Josiah near the docks around {0} and noticed a {1} coat. Corwin claims he was at the {2}, worried about a {3}."
-    }
+    },
+    {
+       id: "letter-to-self",
+      title: "The Letter He Sent Himself",
+      letters: [
+        {
+          witness: "Mara Hale",
+          inkColor: "#4a3018",
+          text: "We searched the desk together. Behind the ledger I found a coded list. Names and numbers in cipher. Tom looked away.",
+          clueWords: ["coded", "cipher"]
+        },
+        {
+          witness: "Tom Reyes",
+          inkColor: "#2b3a4a",
+          text: "We searched the desk together. I found the same list. It was in plain hand, not cipher. Directions to the coast. Mara must have misread it.",
+          clueWords: ["plain", "directions"]
+        }
+      ],
+      corkboardTemplate: "Mara found a {0} list in {1}. Tom says it was {2} writing, with {3} to the coast. They cannot both be right."
+    },
+
+    
 
     // TODO(narrative): add these 4 more events, same shape as above —
     // see docs/game-explainer.md for the story bible and witness details.
