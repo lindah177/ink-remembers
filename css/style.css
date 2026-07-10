@@ -1,0 +1,138 @@
+:root {
+  --parchment: #e8d9b3;
+  --parchment-edge: #cdb787;
+  --ink: #2b1f14;
+  --ink-soft: #4a3826;
+  --blot: #b89a68;
+  --accent: #6b4226;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at center, #3c3226 0%, #201a12 100%);
+  font-family: "EB Garamond", serif;
+}
+
+.desk {
+  position: relative;
+  width: min(720px, 92vw);
+}
+
+.letter {
+  position: relative;
+  background: radial-gradient(circle at 20% 15%, rgba(255, 255, 255, 0.08), transparent 40%),
+    linear-gradient(var(--parchment), var(--parchment-edge));
+  padding: 48px 44px 32px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), inset 0 0 60px rgba(90, 60, 20, 0.15);
+  clip-path: polygon(0% 1%, 2% 0%, 98% 0%, 100% 2%, 100% 98%, 98% 100%, 2% 100%, 0% 99%);
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-family: "Caveat", cursive;
+  font-size: 2rem;
+  color: var(--accent);
+  margin: 0 0 4px;
+  font-weight: 700;
+}
+
+.sub {
+  font-style: italic;
+  color: var(--ink-soft);
+  margin: 0 0 28px;
+  font-size: 0.95rem;
+}
+
+.text {
+  font-size: 1.35rem;
+  line-height: 2.1;
+  color: var(--ink);
+  position: relative;
+}
+
+.word {
+  position: relative;
+  cursor: pointer;
+  color: var(--ink-color, var(--ink));
+  transition: opacity 1.2s linear, color 0.2s ease;
+  padding: 0 1px;
+}
+
+.word:hover:not(.caught):not(.gone) {
+  color: var(--accent);
+}
+
+.word.caught {
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: rgba(107, 66, 38, 0.4);
+  text-underline-offset: 4px;
+}
+
+.word.gone {
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+.blot {
+  position: absolute;
+  background: radial-gradient(ellipse at center, var(--blot) 0%, transparent 70%);
+  opacity: 0.45;
+  border-radius: 50%;
+  pointer-events: none;
+  transform: scale(1.6);
+  filter: blur(1px);
+}
+
+.corkboard {
+  background: #3a2e22;
+  border: 1px solid #55442f;
+  border-radius: 4px;
+  padding: 28px;
+  color: var(--parchment);
+  font-size: 1.15rem;
+  line-height: 1.8;
+}
+
+.corkboard.hidden {
+  display: none;
+}
+
+.corkboard strong {
+  color: #f0c987;
+}
+
+.blot-text {
+  letter-spacing: 2px;
+  opacity: 0.5;
+}
+
+.controls {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+button {
+  font-family: "EB Garamond", serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.03em;
+  background: none;
+  border: 1px solid var(--accent);
+  color: var(--parchment);
+  padding: 8px 18px;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+button:hover {
+  background: rgba(107, 66, 38, 0.3);
+}
