@@ -5,7 +5,13 @@
   --ink-soft: #4a3826;
   --blot: #b89a68;
   --accent: #6b4226;
+  --cork-dark: #664d35;
+  --cork-light: #72553c;
 }
+
+/* =========================
+   Global Styles
+========================= */
 
 * {
   box-sizing: border-box;
@@ -15,55 +21,169 @@ body {
   margin: 0;
   min-height: 100vh;
   display: flex;
-  align-items: center;
   justify-content: center;
-  background: radial-gradient(ellipse at center, #3c3226 0%, #201a12 100%);
+  align-items: center;
+
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.45)),
+    repeating-linear-gradient(
+      90deg,
+      #4c3928 0px,
+      #3e2f22 40px,
+      #4d3827 80px
+    );
+
   font-family: "EB Garamond", serif;
 }
+
+/* =========================
+   Desk
+========================= */
 
 .desk {
   position: relative;
   width: min(720px, 92vw);
+  filter: drop-shadow(0 25px 35px rgba(0, 0, 0, 0.45));
 }
+
+/* =========================
+   Letter
+========================= */
 
 .letter {
   position: relative;
-  background: radial-gradient(circle at 20% 15%, rgba(255, 255, 255, 0.08), transparent 40%),
+  background:
+    radial-gradient(circle at 20% 15%, rgba(255, 255, 255, 0.08), transparent 40%),
     linear-gradient(var(--parchment), var(--parchment-edge));
+
   padding: 48px 44px 32px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), inset 0 0 60px rgba(90, 60, 20, 0.15);
-  clip-path: polygon(0% 1%, 2% 0%, 98% 0%, 100% 2%, 100% 98%, 98% 100%, 2% 100%, 0% 99%);
+
   margin-bottom: 20px;
+
+  transform: rotate(-1deg);
+
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    inset 0 0 60px rgba(90, 60, 20, 0.15);
+
+  clip-path: polygon(
+    0% 1%,
+    2% 0%,
+    98% 0%,
+    100% 2%,
+    100% 98%,
+    98% 100%,
+    2% 100%,
+    0% 99%
+  );
+
+  animation: flicker 5s infinite;
+  transition: opacity .8s ease, transform .8s ease;
 }
 
+.letter::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background:
+    radial-gradient(circle at 15% 25%, rgba(255,255,255,.25), transparent 18%),
+    radial-gradient(circle at 80% 60%, rgba(120,80,40,.12), transparent 30%);
+
+  mix-blend-mode: multiply;
+  opacity: .5;
+  pointer-events: none;
+}
+
+.letter::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  box-shadow:
+    inset 0 0 60px rgba(40,20,5,.35),
+    inset 0 0 120px rgba(0,0,0,.2);
+
+  pointer-events: none;
+}
+
+/* =========================
+   Flicker Animation
+========================= */
+
+@keyframes flicker {
+
+  0% {
+    filter: brightness(1);
+  }
+
+  25% {
+    filter: brightness(1.04);
+  }
+
+  50% {
+    filter: brightness(.97);
+  }
+
+  75% {
+    filter: brightness(1.02);
+  }
+
+  100% {
+    filter: brightness(1);
+  }
+
+}
+
+/* =========================
+   Typography
+========================= */
+
 h1 {
+  margin: 0 0 4px;
+
   font-family: "Caveat", cursive;
   font-size: 2rem;
-  color: var(--accent);
-  margin: 0 0 4px;
   font-weight: 700;
+
+  color: var(--accent);
 }
 
 .sub {
-  font-style: italic;
-  color: var(--ink-soft);
   margin: 0 0 28px;
-  font-size: 0.95rem;
+
+  font-style: italic;
+  font-size: .95rem;
+
+  color: var(--ink-soft);
 }
 
 .text {
+  position: relative;
+
   font-size: 1.35rem;
   line-height: 2.1;
+
   color: var(--ink);
-  position: relative;
 }
+
+/* =========================
+   Interactive Words
+========================= */
 
 .word {
   position: relative;
+
   cursor: pointer;
+
   color: var(--ink-color, var(--ink));
-  transition: opacity 1.2s linear, color 0.2s ease;
+
   padding: 0 1px;
+
+  transition:
+    opacity 1.2s linear,
+    color .2s ease,
+    transform .2s ease;
 }
 
 .word:hover:not(.caught):not(.gone) {
@@ -72,9 +192,12 @@ h1 {
 
 .word.caught {
   font-weight: 600;
+
   text-decoration: underline;
-  text-decoration-color: rgba(107, 66, 38, 0.4);
+  text-decoration-color: rgba(107,66,38,.4);
   text-underline-offset: 4px;
+
+  animation: inkReveal .5s ease;
 }
 
 .word.gone {
@@ -82,24 +205,89 @@ h1 {
   pointer-events: none;
 }
 
-.blot {
-  position: absolute;
-  background: radial-gradient(ellipse at center, var(--blot) 0%, transparent 70%);
-  opacity: 0.45;
-  border-radius: 50%;
-  pointer-events: none;
-  transform: scale(1.6);
-  filter: blur(1px);
+@keyframes inkReveal {
+
+  from {
+    opacity: .3;
+    transform: scale(.8);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+
 }
 
+/* =========================
+   Ink Blots
+========================= */
+
+.blot {
+  position: absolute;
+
+  background:
+    radial-gradient(
+      ellipse at center,
+      var(--blot) 0%,
+      transparent 70%
+    );
+
+  opacity: .45;
+
+  border-radius: 50%;
+
+  transform: scale(1.6);
+
+  filter: blur(1px);
+
+  pointer-events: none;
+}
+
+.blot-text {
+  letter-spacing: 2px;
+  opacity: .5;
+}
+
+/* =========================
+   Corkboard
+========================= */
+
 .corkboard {
-  background: #3a2e22;
-  border: 1px solid #55442f;
+  position: relative;
+
+  background:
+    repeating-linear-gradient(
+      45deg,
+      var(--cork-light),
+      var(--cork-light) 6px,
+      var(--cork-dark) 6px,
+      var(--cork-dark) 12px
+    );
+
+  border: 8px solid #4c3828;
   border-radius: 4px;
+
   padding: 28px;
+
   color: var(--parchment);
+
   font-size: 1.15rem;
   line-height: 1.8;
+
+  transform: rotate(.6deg);
+
+  box-shadow: 0 10px 30px rgba(0,0,0,.45);
+
+  opacity: 0;
+  transition:
+    opacity .8s ease,
+    transform .8s ease;
+}
+
+.corkboard.show {
+  opacity: 1;
+  transform: rotate(.6deg) translateY(0);
 }
 
 .corkboard.hidden {
@@ -110,10 +298,38 @@ h1 {
   color: #f0c987;
 }
 
-.blot-text {
-  letter-spacing: 2px;
-  opacity: 0.5;
+/* Push Pins */
+
+.corkboard::before,
+.corkboard::after {
+
+  content: "";
+
+  position: absolute;
+
+  width: 14px;
+  height: 14px;
+
+  border-radius: 50%;
+
+  background: #d3c7b0;
+
+  box-shadow: 0 2px 6px rgba(0,0,0,.4);
 }
+
+.corkboard::before {
+  top: 12px;
+  left: 18px;
+}
+
+.corkboard::after {
+  top: 12px;
+  right: 18px;
+}
+
+/* =========================
+   Controls
+========================= */
 
 .controls {
   display: flex;
@@ -123,16 +339,57 @@ h1 {
 
 button {
   font-family: "EB Garamond", serif;
-  font-size: 0.9rem;
-  letter-spacing: 0.03em;
-  background: none;
-  border: 1px solid var(--accent);
-  color: var(--parchment);
+  font-size: .9rem;
+  letter-spacing: .03em;
+
   padding: 8px 18px;
+
   cursor: pointer;
+
+  color: var(--parchment);
+  background: none;
+
+  border: 1px solid var(--accent);
   border-radius: 2px;
+
+  transition:
+    background .3s,
+    transform .25s;
 }
 
 button:hover {
-  background: rgba(107, 66, 38, 0.3);
+  background: rgba(107,66,38,.3);
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
+.memory-progress{
+    margin-bottom:20px;
+    color:#e8d9b3;
+    font-style:italic;
+}
+
+.memory-summary{
+    margin-top:16px;
+}
+
+.revealed-word{
+    animation:revealWord .6s ease forwards;
+}
+
+@keyframes revealWord{
+
+    from{
+        opacity:0;
+        transform:scale(.8);
+    }
+
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+
 }
