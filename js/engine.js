@@ -58,19 +58,17 @@ function renderLetter(container, letter, onCaught, onComplete) {
     const span = document.createElement("span");
     span.className = isClueWord ? "word clue-word" : "word";
     span.textContent = token;
-    span.setAttribute("role", isClueWord ? "button" : "presentation");
-    span.setAttribute("tabindex", isClueWord ? "0" : "-1");
+    span.setAttribute("role", "button");
+    span.setAttribute("tabindex", "0");
     span.setAttribute("aria-label", isClueWord ? `Catch word ${token}` : `Word ${token}`);
 
-    if (isClueWord) {
-      span.addEventListener("click", () => catchWord(span, token));
-      span.addEventListener("keydown", (event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          catchWord(span, token);
-        }
-      });
-    }
+    span.addEventListener("click", () => handleWordClick(span, token, isClueWord));
+    span.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        handleWordClick(span, token, isClueWord);
+      }
+    });
 
     container.appendChild(span);
     spans.push(span);
@@ -85,17 +83,26 @@ function renderLetter(container, letter, onCaught, onComplete) {
     }
   }
 
-  function catchWord(span, rawWord) {
-    if (!isActive || span.classList.contains("gone") || span.classList.contains("caught") || !span.classList.contains("clue-word")) return;
-
-    span.classList.add("caught");
-    span.style.opacity = "1";
-    span.setAttribute("aria-pressed", "true");
+  function handleWordClick(span, rawWord, isClueWord) {
+    if (!isActive || span.classList.contains("gone") || span.classList.contains("caught") || span.classList.contains("missed")) return;
 
     const cleanWord = normalizeWord(rawWord);
-    caught.push(cleanWord);
-    onCaught(cleanWord, caught);
-    finalizeIfNeeded();
+
+    if (isClueWord) {
+      span.classList.add("caught");
+      span.style.opacity = "1";
+      span.setAttribute("aria-pressed", "true");
+
+      caught.push(cleanWord);
+      onCaught(cleanWord, caught, true);
+      finalizeIfNeeded();
+      return;
+    }
+
+    span.classList.add("missed");
+    span.style.opacity = "0.85";
+    span.setAttribute("aria-pressed", "false");
+    onCaught(cleanWord, caught, false);
   }
 
   function startFade(span) {
