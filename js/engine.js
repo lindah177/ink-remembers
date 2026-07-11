@@ -18,6 +18,10 @@ function shuffle(arr) {
   return a;
 }
 
+function normalizeWord(rawWord) {
+  return rawWord.replace(/[.,!?;:"'()[\]{}]/g, "").trim().toLowerCase();
+}
+
 /**
  * Renders a letter into `container` with the fade-and-catch mechanic.
  *
@@ -33,45 +37,71 @@ function renderLetter(container, letter, onCaught, onComplete) {
   const timers = [];
   const caught = [];
   let settledCount = 0;
+  let isActive = true;
 
   container.innerHTML = "";
   container.style.setProperty("--ink-color", letter.inkColor || "#2b1f14");
 
-  const words = letter.text.split(" ");
-  const spans = words.map((w) => {
+  const tokens = letter.text.split(/(\s+)/).filter(Boolean);
+  const spans = [];
+
+  tokens.forEach((token) => {
+    if (/^\s+$/.test(token)) {
+      container.appendChild(document.createTextNode(token));
+      return;
+    }
+
     const span = document.createElement("span");
     span.className = "word";
-    span.textContent = w;
-    span.addEventListener("click", () => catchWord(span, w));
+    span.textContent = token;
+    span.setAttribute("role", "button");
+    span.setAttribute("tabindex", "0");
+    span.setAttribute("aria-label", `Catch word ${token}`);
+
+    span.addEventListener("click", () => catchWord(span, token));
+    span.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        catchWord(span, token);
+      }
+    });
+
     container.appendChild(span);
-    container.appendChild(document.createTextNode(" "));
-    return span;
+    spans.push(span);
   });
 
-  function checkComplete() {
+  function finalizeIfNeeded() {
+    if (!isActive) return;
     settledCount++;
-    if (settledCount === spans.length) onComplete(caught);
+    if (settledCount === spans.length) {
+      isActive = false;
+      onComplete(caught);
+    }
   }
 
   function catchWord(span, rawWord) {
-    if (span.classList.contains("gone") || span.classList.contains("caught")) return;
+    if (!isActive || span.classList.contains("gone") || span.classList.contains("caught")) return;
+
     span.classList.add("caught");
     span.style.opacity = "1";
-    const cleanWord = rawWord.replace(/[.,!?]/g, "");
+    span.setAttribute("aria-pressed", "true");
+
+    const cleanWord = normalizeWord(rawWord);
     caught.push(cleanWord);
     onCaught(cleanWord, caught);
-    checkComplete();
+    finalizeIfNeeded();
   }
 
   function startFade(span) {
-    if (span.classList.contains("caught")) return;
+    if (!isActive || span.classList.contains("caught") || span.classList.contains("gone")) return;
+
     span.style.transitionDuration = FADE_DURATION_MS + "ms";
     span.style.opacity = "0";
     const t = setTimeout(() => {
-      if (span.classList.contains("caught")) return; // caught mid-fade, leave it
+      if (!isActive || span.classList.contains("caught")) return;
       dropBlot(span);
       span.classList.add("gone");
-      checkComplete();
+      finalizeIfNeeded();
     }, FADE_DURATION_MS);
     timers.push(t);
   }
@@ -95,6 +125,8 @@ function renderLetter(container, letter, onCaught, onComplete) {
   });
 
   return function teardown() {
+    isActive = false;
     timers.forEach(clearTimeout);
+    container.querySelectorAll(".blot").forEach((blot) => blot.remove());
   };
 }
