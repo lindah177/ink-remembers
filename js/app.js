@@ -149,6 +149,76 @@ function showCorkboard() {
   corkboardContainer.classList.remove("hidden");
 }
 
+function getTotalClueWords() {
+  return GAME_DATA.events.reduce((total, event) => {
+    return total + event.letters.reduce((sum, letter) => sum + letter.clueWords.length, 0);
+  }, 0);
+}
+
+function getUniqueCaughtClues() {
+  const allClues = GAME_DATA.events.flatMap(e => e.letters.flatMap(l => l.clueWords.map(c => c.toLowerCase())));
+  const unique = [...new Set(clueTally.map(w => w.toLowerCase()))];
+  return unique.filter(c => allClues.includes(c));
+}
+
+function checkFinalLetterUnlock() {
+  const total = getTotalClueWords();
+  const caught = getUniqueCaughtClues().length;
+  caught >= total ? showEnding() : showIncompleteScreen(caught, total);
+}
+
+function showIncompleteScreen(caught, total) {
+  isGameOver = true;
+  witnessLabel.textContent = "The Past Slips Away";
+  letterContainer.innerHTML = "";
+  corkboardContainer.classList.add("hidden");
+  if (teardownCurrentLetter) teardownCurrentLetter();
+
+  letterContainer.innerHTML = `
+    <div class="scene-intro game-over">
+      <p class="scene-label">Memory Incomplete</p>
+      <h2>The Final Letter Remains Sealed</h2>
+      <p class="scene-copy">You recovered <strong>${caught}</strong> of <strong>${total}</strong> memories. Some words escaped before you could catch them.</p>
+      <button id="restart-btn" class="primary-btn">Try Again ↺</button>
+    </div>
+  `;
+  nextBtn.disabled = true;
+
+  const restartBtn = document.getElementById("restart-btn");
+  if (restartBtn) restartBtn.addEventListener("click", resetGame, { once: true });
+}
+
+function showEndingScreen(resolved) {
+  isGameOver = true;
+  setTimeout(() => {
+    const desk = document.querySelector(".desk");
+    const overlay = document.createElement("div");
+    overlay.className = "game-over-overlay";
+    overlay.innerHTML = `
+      <div class="game-over-content">
+        <h2>${resolved ? "The Truth Survives" : "The Truth Fades"}</h2>
+        <p>${resolved
+          ? "You caught enough of the past to understand what happened."
+          : "The past remains incomplete. Some things stay buried."}</p>
+        <div class="game-over-actions">
+          <button id="replay-btn" class="primary-btn">Read Again ↺</button>
+          <a href="index.html" class="ghost-btn">Return to Menu</a>
+        </div>
+      </div>
+    `;
+    desk.appendChild(overlay);
+    requestAnimationFrame(() => overlay.classList.add("show"));
+    document.getElementById("replay-btn").addEventListener("click", () => {
+      overlay.remove();
+      resetGame();
+    });
+  }, 2000);
+
+  nextBtn.textContent = "Play Again ↺";
+  nextBtn.disabled = false;
+  nextBtn.classList.add("ready");
+}
+
 function nextEvent() {
   currentEventIndex++;
   currentLetterIndex = 0;
@@ -157,7 +227,7 @@ function nextEvent() {
   if (currentEventIndex < GAME_DATA.events.length) {
     loadLetter();
   } else {
-    showEnding();
+    checkFinalLetterUnlock();
   }
 }
 
@@ -178,11 +248,13 @@ function showEnding() {
       const line = resolved ? GAME_DATA.ending.resolvedLine : GAME_DATA.ending.unresolvedLine;
       corkboardContainer.innerHTML = `<p>${line}</p>`;
       corkboardContainer.classList.remove("hidden");
+      showEndingScreen(resolved);
     }
   );
 }
 
 nextBtn.addEventListener("click", () => {
+  if (isGameOver) return;
   if (!corkboardContainer.classList.contains("hidden")) {
     nextEvent();
   }
