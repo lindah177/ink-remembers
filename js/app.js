@@ -77,7 +77,15 @@ function loadLetter() {
   witnessLabel.textContent = letter.witness;
 
   if (teardownCurrentLetter) teardownCurrentLetter();
-  teardownCurrentLetter = renderLetter(letterContainer, letter, handleCaught, handleLetterComplete);
+  letterContainer.innerHTML = `
+    <div class="letter-meta">
+      <span class="letter-meta-pill">Clue words: ${letter.clueWords.length}</span>
+    </div>
+  `;
+  const letterBody = document.createElement("div");
+  letterBody.className = "letter-body";
+  letterContainer.appendChild(letterBody);
+  teardownCurrentLetter = renderLetter(letterBody, letter, handleCaught, handleLetterComplete);
   updateScoreDisplay();
 }
 
@@ -233,16 +241,25 @@ function nextEvent() {
 
 function showEnding() {
   const resolved = clueTally.length >= GAME_DATA.ending.threshold;
-  // TODO(integration): render the final letter using renderLetter(), same as
-  // any other letter, then once it completes swap in resolvedLine or
-  // unresolvedLine based on `resolved` and show it as the last screen.
   witnessLabel.textContent = "Josiah Hale";
   letterContainer.innerHTML = "";
   corkboardContainer.classList.add("hidden");
   if (teardownCurrentLetter) teardownCurrentLetter();
+
+  const hiddenText = resolved
+    ? GAME_DATA.ending.text
+    : "The letter remains too faded to read. The past stays hidden.";
+
+  letterContainer.innerHTML = `
+    <div class="letter-meta">
+      <span class="letter-meta-pill">Final letter</span>
+    </div>
+    <div class="letter-body final-letter-body"></div>
+  `;
+  const finalBody = letterContainer.querySelector(".final-letter-body");
   teardownCurrentLetter = renderLetter(
-    letterContainer,
-    { text: GAME_DATA.ending.text, inkColor: "#2b1f14" },
+    finalBody,
+    { text: hiddenText, inkColor: "#2b1f14", clueWords: GAME_DATA.ending.clueWords || [] },
     handleCaught,
     () => {
       const line = resolved ? GAME_DATA.ending.resolvedLine : GAME_DATA.ending.unresolvedLine;

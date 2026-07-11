@@ -21,13 +21,13 @@ const GAME_DATA = {
         {
           witness: "Mara Hale",
           inkColor: "#4a3018",
-          text: "He burned letters in the hearth before I woke. Ash still on his sleeve. He pressed our mother's ring into my palm and said nothing.",
+          text: "When I woke up, Josiah was burning letters in the fireplace. There was ash on his sleeve. Before he left, he placed our mother's ring in my hand without saying a word.",
           clueWords: ["letters", "ring"]
         },
         {
           witness: "Tom Reyes",
           inkColor: "#2b3a4a",
-          text: "I came early. He was packing a bag by the window. He slipped a second ring into his pocket when he saw me. He did not smile.",
+          text: "I arrived early that morning. Josiah was packing a bag by the window. When he noticed me, he slipped a second ring into his pocket. He didn't say much.",
           clueWords: ["bag", "pocket"]
         }
       ],
@@ -41,13 +41,13 @@ const GAME_DATA = {
         {
           witness: "Corwin Vane",
           inkColor: "#5a1f1f",
-          text: "The stranger left before the shouting began. Fine coat, no name. Josiah was already angry when I returned from the back room.",
+          text: "A stranger came by that day, but he left before the argument started. I had been in the back room, and when I came back, Josiah was already angry.",
           clueWords: ["stranger", "returned"]
         },
         {
           witness: "Tom Reyes",
           inkColor: "#2b3a4a",
-          text: "I was outside the door. The stranger was still inside when Halvard's name was shouted. Then a chair scraped. Then silence.",
+          text: "I was standing outside the door. The stranger was still inside when someone shouted Halvard's name. A chair scraped across the floor, and then everything went quiet.",
           clueWords: ["halvard", "silence"]
         }
       ],
@@ -62,13 +62,13 @@ const GAME_DATA = {
         {
           witness: "Tom Reyes",
           inkColor: "#2b3a4a",
-          text: "I saw him at the docks past midnight. He was not alone. The other man wore a grey coat and carried no lantern.",
+          text: "I saw Josiah at the docks just after midnight. He wasn't alone. The man with him wore a grey coat and wasn't carrying a lantern.",
           clueWords: ["midnight", "grey"]
         },
         {
           witness: "Corwin Vane",
           inkColor: "#5a1f1f",
-          text: "I was nowhere near the harbor that night. I was at the tavern, alone, nursing a bad mood and a worse debt.",
+          text: "I wasn't anywhere near the harbor that night. I stayed at the tavern by myself. I had debts to worry about, not trips to the docks.",
           clueWords: ["tavern", "debt"]
         }
       ],
@@ -81,13 +81,13 @@ const GAME_DATA = {
         {
           witness: "Mara Hale",
           inkColor: "#4a3018",
-          text: "We searched the desk together. Behind the ledger I found a coded list. Names and numbers in cipher. Tom looked away.",
+          text: "We searched his desk together. Behind the ledger I found a coded list with names and numbers written in cipher. Tom looked away as soon as I picked it up.",
           clueWords: ["coded", "cipher"]
         },
         {
           witness: "Tom Reyes",
           inkColor: "#2b3a4a",
-          text: "We searched the desk together. I found the same list. It was in plain hand, not cipher. Directions to the coast. Mara must have misread it.",
+          text: "We searched the desk together. I found the same list, but it wasn't coded at all. It was written clearly and gave directions to the coast. Mara must have misunderstood it.",
           clueWords: ["plain", "directions"]
         }
       ],
@@ -101,13 +101,13 @@ const GAME_DATA = {
         {
           witness: "Corwin Vane",
           inkColor: "#5a1f1f",
-          text: "We forced the shed lock together. Behind the rope I found a sealed letter. Mara was checking the window. I put it in my coat.",
+          text: "Mara and I forced open the shed. Behind a coil of rope, I found a sealed letter. Mara was checking the window, so I slipped the letter into my coat.",
           clueWords: ["lock", "sealed"]
         },
         {
           witness: "Mara Hale",
           inkColor: "#4a3018",
-          text: "We forced the shed together. His compass sat on the sill. Placed, not dropped. Corwin turned away fast when I looked at him.",
+          text: "We searched the shed together. Josiah's compass was sitting on the windowsill. It looked like someone had placed it there on purpose. When I looked at Corwin, he quickly turned away.",
           clueWords: ["compass", "placed"]
         }
       ],
@@ -117,10 +117,10 @@ const GAME_DATA = {
   ],
 
   ending: {
-    text: "Whoever finds this — I am sorry for the worry. By the time you read this I will already be gone. There is a debt I could not disappear any other way. Don't follow. I will write again when it is safe, if it is ever safe.",
+    text: "Whoever finds this, I am sorry. By the time you read this I will be gone. I had to disappear to escape a debt that would never let me live in peace. Please do not look for me. If I ever reach safety, I will write again.",
     clueWords: ["disappear", "follow", "safe"],
     threshold: 6, // total clue words caught across the WHOLE game needed for the resolved ending
-    resolvedLine: "...safe on Aldern Island. The debt can chase a dead man all it wants.",
-    unresolvedLine: "...gone, and that will have to be enough of an answer."
+    resolvedLine: "Resolved Josiah: I made it safely on Aldern Island. Let the dept chase the man they think is dead.",
+    unresolvedLine: "Unresolved Josiah:  I am gone now. For now that is all I can leave behind."
   }
 };
