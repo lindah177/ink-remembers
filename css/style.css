@@ -334,7 +334,7 @@ body {
 .word {
   position: relative;
 
-  cursor: pointer;
+  cursor: default;
 
   color: var(--ink-color, var(--ink));
 
@@ -346,15 +346,21 @@ body {
     transform .2s ease;
 }
 
-.word:hover:not(.caught):not(.gone) {
+.word.clue-word {
+  cursor: pointer;
+}
+
+.word.clue-word:hover:not(.caught):not(.gone) {
   color: var(--accent);
 }
 
 .word.caught {
   font-weight: 600;
+  color: #2f6f3d;
+  text-shadow: 0 0 8px rgba(47, 111, 61, 0.18);
 
   text-decoration: underline;
-  text-decoration-color: rgba(107,66,38,.4);
+  text-decoration-color: rgba(47, 111, 61, 0.45);
   text-underline-offset: 4px;
 
   animation: inkReveal .5s ease;

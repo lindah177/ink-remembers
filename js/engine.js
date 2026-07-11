@@ -44,6 +44,7 @@ function renderLetter(container, letter, onCaught, onComplete) {
 
   const tokens = letter.text.split(/(\s+)/).filter(Boolean);
   const spans = [];
+  const clueWords = new Set((letter.clueWords || []).map((word) => normalizeWord(word)));
 
   tokens.forEach((token) => {
     if (/^\s+$/.test(token)) {
@@ -51,20 +52,25 @@ function renderLetter(container, letter, onCaught, onComplete) {
       return;
     }
 
-    const span = document.createElement("span");
-    span.className = "word";
-    span.textContent = token;
-    span.setAttribute("role", "button");
-    span.setAttribute("tabindex", "0");
-    span.setAttribute("aria-label", `Catch word ${token}`);
+    const normalizedToken = normalizeWord(token);
+    const isClueWord = clueWords.has(normalizedToken);
 
-    span.addEventListener("click", () => catchWord(span, token));
-    span.addEventListener("keydown", (event) => {
-      if (event.key === "Enter" || event.key === " ") {
-        event.preventDefault();
-        catchWord(span, token);
-      }
-    });
+    const span = document.createElement("span");
+    span.className = isClueWord ? "word clue-word" : "word";
+    span.textContent = token;
+    span.setAttribute("role", isClueWord ? "button" : "presentation");
+    span.setAttribute("tabindex", isClueWord ? "0" : "-1");
+    span.setAttribute("aria-label", isClueWord ? `Catch word ${token}` : `Word ${token}`);
+
+    if (isClueWord) {
+      span.addEventListener("click", () => catchWord(span, token));
+      span.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          catchWord(span, token);
+        }
+      });
+    }
 
     container.appendChild(span);
     spans.push(span);
@@ -80,7 +86,7 @@ function renderLetter(container, letter, onCaught, onComplete) {
   }
 
   function catchWord(span, rawWord) {
-    if (!isActive || span.classList.contains("gone") || span.classList.contains("caught")) return;
+    if (!isActive || span.classList.contains("gone") || span.classList.contains("caught") || !span.classList.contains("clue-word")) return;
 
     span.classList.add("caught");
     span.style.opacity = "1";
