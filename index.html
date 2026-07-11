@@ -1,64 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>The Ink Remembers</title>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;600&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Ink Remembers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;600&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
+<!-- Soft candlelight effect, shared with the game screen -->
+<div class="candle-glow"></div>
 
-    <!-- Soft candlelight effect -->
-    <div class="candle-glow"></div>
+<main class="landing">
+  <h1 class="game-title">The Ink Remembers</h1>
+  <p class="landing-slogan">Catch the words before the past forgets them.</p>
 
-    <main class="desk">
+  <div class="landing-actions">
+    <button id="begin-btn" class="primary-btn">Begin Reading</button>
+    <button id="how-to-play-btn" class="ghost-btn" aria-expanded="false" aria-controls="how-to-play-panel">
+      How to Play
+    </button>
+  </div>
 
-        <!-- Game Title -->
-        <h1 class="game-title">The Ink Remembers</h1>
+  <section id="how-to-play-panel" class="how-to-play hidden">
+    <h2>How to Play</h2>
+    <ol>
+      <li>A letter appears from a witness. Read fast — the ink starts fading almost right away.</li>
+      <li>Click or tap a word before it disappears to catch it. Caught words are safe for good.</li>
+      <li>Once the whole letter has faded or been caught, the next witness's account appears.</li>
+      <li>After both letters, a corkboard shows what you managed to piece together — anything you missed appears as an ink blot instead.</li>
+      <li>Keep going through all five memories. What you catch adds up — catch enough, and the final letter reveals the truth.</li>
+    </ol>
+  </section>
+</main>
 
-        <!-- Witness Letter -->
-        <section class="letter">
+<script>
+document.getElementById("begin-btn").addEventListener("click", () => {
+  window.location.href = "game.html";
+});
 
-            <h2 id="witness-label">A Witness's Account</h2>
+const howToBtn = document.getElementById("how-to-play-btn");
+const panel = document.getElementById("how-to-play-panel");
 
-            <p class="sub">
-                Read carefully — the ink won't hold forever.
-            </p>
-
-            <p class="text" id="letter-text"></p>
-
-        </section>
-
-        <!-- Final Corkboard -->
-        <section
-            class="corkboard hidden"
-            id="corkboard"
-            aria-live="polite">
-        </section>
-
-        <!-- Controls -->
-        <div class="controls">
-
-            <button id="next-btn">
-                Turn the Page →
-            </button>
-
-        </div>
-
-    </main>
-
-    <script src="js/data.js"></script>
-    <script src="js/engine.js"></script>
-    <script src="js/corkboard.js"></script>
-    <script src="js/app.js"></script>
-
+howToBtn.addEventListener("click", () => {
+  const nowHidden = panel.classList.toggle("hidden");
+  howToBtn.setAttribute("aria-expanded", String(!nowHidden));
+  howToBtn.textContent = nowHidden ? "How to Play" : "Hide Instructions";
+});
+</script>
 </body>
 </html>

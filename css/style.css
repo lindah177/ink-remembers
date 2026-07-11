@@ -37,13 +37,156 @@ body {
 }
 
 /* =========================
+   Candlelight Ambiance
+   (referenced in the HTML as <div class="candle-glow">,
+   didn't have a rule yet — this is what makes it actually glow)
+========================= */
+
+.candle-glow {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+
+  background: radial-gradient(
+    circle at 50% 35%,
+    rgba(255, 195, 110, 0.18),
+    transparent 55%
+  );
+
+  animation: candleBreathe 4.5s ease-in-out infinite;
+}
+
+@keyframes candleBreathe {
+  0%, 100% { opacity: .8; }
+  50% { opacity: 1; }
+}
+
+/* =========================
    Desk
 ========================= */
 
 .desk {
   position: relative;
+  z-index: 1;
   width: min(720px, 92vw);
   filter: drop-shadow(0 25px 35px rgba(0, 0, 0, 0.45));
+}
+
+/* =========================
+   Landing Page
+========================= */
+
+.landing {
+  position: relative;
+  z-index: 1;
+  width: min(600px, 92vw);
+  text-align: center;
+}
+
+.landing .game-title {
+  margin-bottom: 8px;
+}
+
+.landing-slogan {
+  margin: 0 0 40px;
+  font-style: italic;
+  font-size: 1.15rem;
+  color: var(--parchment-edge);
+}
+
+.landing-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.primary-btn {
+  font-family: "EB Garamond", serif;
+  font-size: 1.05rem;
+  letter-spacing: .03em;
+  padding: 14px 32px;
+  cursor: pointer;
+  color: var(--ink);
+  background: var(--parchment);
+  border: none;
+  border-radius: 2px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, .4);
+  transition: transform .25s, box-shadow .25s;
+}
+
+.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, .5);
+}
+
+.ghost-btn {
+  font-family: "EB Garamond", serif;
+  font-size: 1.05rem;
+  letter-spacing: .03em;
+  padding: 14px 28px;
+  cursor: pointer;
+  color: var(--parchment);
+  background: none;
+  border: 1px solid rgba(232, 217, 179, .5);
+  border-radius: 2px;
+  transition: background .3s, transform .25s;
+}
+
+.ghost-btn:hover {
+  background: rgba(232, 217, 179, .1);
+  transform: translateY(-2px);
+}
+
+.how-to-play {
+  margin-top: 28px;
+  padding: 28px 32px;
+  text-align: left;
+
+  background: linear-gradient(var(--parchment), var(--parchment-edge));
+  color: var(--ink);
+  border-radius: 3px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, .4);
+
+  animation: revealWord .4s ease;
+}
+
+.how-to-play.hidden {
+  display: none;
+}
+
+.how-to-play h2 {
+  font-family: "Caveat", cursive;
+  font-size: 1.6rem;
+  color: var(--accent);
+  margin: 0 0 12px;
+}
+
+.how-to-play ol {
+  margin: 0;
+  padding-left: 20px;
+  line-height: 1.7;
+}
+
+/* Small link back to the landing page from inside the game screen */
+.back-link {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 2;
+
+  font-family: "EB Garamond", serif;
+  font-size: .85rem;
+  color: var(--parchment-edge);
+  text-decoration: none;
+  opacity: .7;
+  transition: opacity .25s;
+}
+
+.back-link:hover {
+  opacity: 1;
 }
 
 /* =========================
@@ -139,14 +282,31 @@ body {
    Typography
 ========================= */
 
-h1 {
+/* Witness name inside each letter card (was plain "h1" before —
+   split out explicitly now that the game title also uses an h1,
+   so the two never fight over the same rule again) */
+.letter h2 {
   margin: 0 0 4px;
 
   font-family: "Caveat", cursive;
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: 700;
 
   color: var(--accent);
+}
+
+/* Main game title — shared between the landing page and the game screen */
+.game-title {
+  margin: 0 0 20px;
+  text-align: center;
+
+  font-family: "Caveat", cursive;
+  font-size: 2.8rem;
+  font-weight: 700;
+  letter-spacing: .02em;
+
+  color: var(--parchment);
+  text-shadow: 0 0 18px rgba(240, 201, 135, .5), 0 2px 4px rgba(0, 0, 0, .6);
 }
 
 .sub {
@@ -327,6 +487,28 @@ h1 {
   right: 18px;
 }
 
+/* Row of dots giving an at-a-glance sense of how much was recovered,
+   alongside the exact "X of Y" count already in the text */
+.memory-dots {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0 4px;
+}
+
+.memory-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(232, 217, 179, .2);
+  border: 1px solid rgba(232, 217, 179, .4);
+  transition: background .4s ease, box-shadow .4s ease;
+}
+
+.memory-dot.filled {
+  background: #f0c987;
+  box-shadow: 0 0 8px rgba(240, 201, 135, .7);
+}
+
 /* =========================
    Controls
 ========================= */
@@ -364,6 +546,32 @@ button:hover {
 
 button:active {
   transform: translateY(1px);
+}
+
+/* Idle state before the corkboard is ready — matches the actual click
+   behavior in app.js, which already no-ops until the corkboard is shown */
+button:disabled {
+  opacity: .4;
+  cursor: default;
+}
+
+button:disabled:hover {
+  background: none;
+  transform: none;
+}
+
+/* Applied once the corkboard is ready, so the button visibly invites a click */
+button.ready {
+  animation: readyPulse 1.6s ease-in-out infinite;
+}
+
+@keyframes readyPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 rgba(240, 201, 135, 0);
+  }
+  50% {
+    box-shadow: 0 0 14px rgba(240, 201, 135, .55);
+  }
 }
 
 .memory-progress{
